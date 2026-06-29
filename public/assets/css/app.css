@@ -1,0 +1,37 @@
+:root {
+    --daya-bg: #f5f7fb;
+    --daya-text: #0f172a;
+    --daya-muted: #64748b;
+    --daya-border: #e2e8f0;
+}
+
+body {
+    font-family: Inter, Arial, sans-serif;
+    background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+    color: var(--daya-text);
+    min-height: 100vh;
+}
+
+.card {
+    border-radius: 1rem;
+}
+
+.status-card {
+    background: var(--daya-bg);
+    border: 1px solid var(--daya-border);
+    border-radius: 1rem;
+    padding: 1rem;
+    height: 100%;
+}
+
+.status-label {
+    color: var(--daya-muted);
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+}
+
+.status-value {
+    font-weight: 700;
+    font-size: 1rem;
+    word-break: break-word;
+}

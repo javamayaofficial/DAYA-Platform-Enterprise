@@ -1,0 +1,30 @@
+# AFFILIATE & REFERRAL MODULE — README
+
+> **Status: 🔴 DRAFT (SCAFFOLD)** — Modul ini **belum dirancang**. **JANGAN diimplementasi.** Lengkapi mengikuti `MODULE_TEMPLATE.md` & minta persetujuan terlebih dahulu.
+
+
+## METADATA
+| Atribut | Nilai |
+|---|---|
+| Modul | Affiliate & Referral |
+| Bounded Context | BC-GRW |
+| Status | DRAFT |
+| Referensi | DOMAIN_MODEL.md (sec. 6.15-6.16) ; Blueprint #8 |
+
+---
+
+## TUJUAN & RUANG LINGKUP
+_(Belum diisi — lengkapi mengikuti MODULE_TEMPLATE.md.)_
+
+## ENTITY YANG DIMILIKI
+_(Lihat DOMAIN_MODEL.md untuk daftar entity awal.)_
+
+## INDEKS DOKUMEN MODUL
+1. BUSINESS_RULES.md
+2. FLOW.md
+3. DATABASE.md
+4. API.md
+5. UI.md
+6. DEVELOPMENT_NOTES.md
+7. TESTING_CHECKLIST.md
+8. DEPLOYMENT_NOTES.md

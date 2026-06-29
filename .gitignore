@@ -1,0 +1,5 @@
+/storage/logs/*.log
+/storage/cache/*
+!/storage/cache/.gitkeep
+/storage/config/.env
+/public/assets/.DS_Store

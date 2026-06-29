@@ -1,0 +1,27 @@
+<?php $flash = $flash ?? null; $errors = $errors ?? []; $old = $old ?? []; ?>
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-8 col-xl-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4 p-md-5">
+                <span class="badge text-bg-dark mb-3">Email Verification</span>
+                <h1 class="h4 mb-3">Periksa inbox Anda</h1>
+                <p class="text-secondary">Kami mengirimkan tautan verifikasi untuk mengaktifkan akun Anda.</p>
+                <?php if (is_array($flash)): ?>
+                    <div class="alert alert-<?= e((string) $flash['type']) ?>"><?= e((string) $flash['message']) ?></div>
+                <?php endif; ?>
+                <form method="post" action="/auth/verify-notice" class="row g-3">
+                    <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                    <div class="col-12">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" value="<?= e((string) ($old['email'] ?? '')) ?>">
+                        <?php if (isset($errors['email'])): ?><div class="text-danger small mt-1"><?= e((string) $errors['email']) ?></div><?php endif; ?>
+                    </div>
+                    <div class="col-12 d-flex gap-2 flex-wrap">
+                        <button class="btn btn-dark" type="submit">Kirim Ulang Verifikasi</button>
+                        <a class="btn btn-outline-secondary" href="/auth/login">Ke Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

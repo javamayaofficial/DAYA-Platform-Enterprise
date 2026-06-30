@@ -6,7 +6,7 @@ $errors = $errors ?? [];
 $visibilityOptions = $visibilityOptions ?? [];
 ?>
 <form method="post" action="<?= e((string) $formAction) ?>" class="row g-3">
-    <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+    <?= csrf_input() ?>
     <div class="col-12">
         <label class="form-label">Title</label>
         <input class="form-control<?= isset($errors['title']) ? ' is-invalid' : '' ?>" name="title" value="<?= e((string) ($collection['title'] ?? '')) ?>" placeholder="Nama collection">

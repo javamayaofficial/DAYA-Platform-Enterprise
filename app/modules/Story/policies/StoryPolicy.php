@@ -35,8 +35,14 @@ final class StoryPolicy
 
     public function canViewPublic(Story $story): bool
     {
+        $isPublished = $story->status === 'published';
+        $isScheduledActive = $story->status === 'scheduled'
+            && $story->publishedAt !== null
+            && strtotime($story->publishedAt) !== false
+            && strtotime($story->publishedAt) <= time();
+
         return $story->deletedAt === null
             && $story->visibility === 'public'
-            && in_array($story->status, ['published', 'scheduled'], true);
+            && ($isPublished || $isScheduledActive);
     }
 }

@@ -7,6 +7,7 @@ namespace App\Modules\Creator\Services;
 use App\Core\Database;
 use App\Core\Modular\BaseModule;
 use App\Core\Modular\BaseService;
+use App\Core\Notifications\WhatsAppNotifier;
 use App\Modules\Authentication\Models\RoleRepository;
 use App\Modules\Creator\Models\CreatorRepository;
 use App\Modules\Creator\Policies\CreatorPolicy;
@@ -54,6 +55,15 @@ final class CreatorFactory extends BaseService
 
     public function service(): CreatorService
     {
-        return new CreatorService($this->module(), $this->repository(), $this->roleRepository());
+        return new CreatorService(
+            $this->module(),
+            $this->repository(),
+            $this->roleRepository(),
+            new WhatsAppNotifier(),
+            (array) config('app.whatsapp.admin_targets', []),
+            (array) config('app.whatsapp.events', []),
+            (string) config('app.url', 'https://localhost'),
+            (string) config('app.name', 'DAYA Platform')
+        );
     }
 }

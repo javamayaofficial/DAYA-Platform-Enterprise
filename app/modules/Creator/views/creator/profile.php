@@ -95,7 +95,7 @@ $skillItems = is_array($creator['skills'] ?? null) ? $creator['skills'] : [];
 
                 <h3 class="h6 mb-3">Social Links</h3>
                 <form method="post" action="/creator/profile/social-links" class="row g-3 mb-4">
-                    <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                    <?= csrf_input() ?>
                     <div class="col-md-4">
                         <select class="form-select" name="platform">
                             <?php foreach ($socialPlatforms as $platformSlug => $platformLabel): ?>
@@ -130,7 +130,7 @@ $skillItems = is_array($creator['skills'] ?? null) ? $creator['skills'] : [];
                                         <td><a href="<?= e((string) ($link['url'] ?? '#')) ?>" target="_blank" rel="noopener"><?= e((string) ($link['url'] ?? '-')) ?></a></td>
                                         <td class="text-end">
                                             <form method="post" action="/creator/profile/social-links/<?= e((string) ($link['id'] ?? 0)) ?>/delete" class="d-inline">
-                                                <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                                                <?= csrf_input() ?>
                                                 <button class="btn btn-sm btn-outline-danger" type="submit">Hapus</button>
                                             </form>
                                         </td>
@@ -147,7 +147,7 @@ $skillItems = is_array($creator['skills'] ?? null) ? $creator['skills'] : [];
             <div class="card-body p-4">
                 <h2 class="h5 mb-3">Portfolio</h2>
                 <form method="post" action="/creator/profile/portfolio" class="row g-3 mb-4">
-                    <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                    <?= csrf_input() ?>
                     <div class="col-md-4">
                         <select class="form-select" name="portfolio_type">
                             <?php foreach ($portfolioTypes as $typeKey => $typeLabel): ?>
@@ -201,7 +201,7 @@ $skillItems = is_array($creator['skills'] ?? null) ? $creator['skills'] : [];
                                         <a href="<?= e((string) ($item['url'] ?? '#')) ?>" target="_blank" rel="noopener"><?= e((string) ($item['url'] ?? '-')) ?></a>
                                     </div>
                                     <form method="post" action="/creator/profile/portfolio/<?= e((string) ($item['id'] ?? 0)) ?>/delete">
-                                        <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                                        <?= csrf_input() ?>
                                         <button class="btn btn-sm btn-outline-danger" type="submit">Hapus</button>
                                     </form>
                                 </div>
@@ -216,7 +216,7 @@ $skillItems = is_array($creator['skills'] ?? null) ? $creator['skills'] : [];
             <div class="card-body p-4">
                 <h2 class="h5 mb-3">Achievement</h2>
                 <form method="post" action="/creator/profile/achievements" class="row g-3 mb-4">
-                    <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                    <?= csrf_input() ?>
                     <div class="col-md-6">
                         <input class="form-control" name="achievement_title" placeholder="Judul achievement">
                     </div>
@@ -250,7 +250,7 @@ $skillItems = is_array($creator['skills'] ?? null) ? $creator['skills'] : [];
                                         <div class="small mt-2"><?= e((string) ($achievement['description'] ?? '')) ?></div>
                                     </div>
                                     <form method="post" action="/creator/profile/achievements/<?= e((string) ($achievement['id'] ?? 0)) ?>/delete">
-                                        <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                                        <?= csrf_input() ?>
                                         <button class="btn btn-sm btn-outline-danger" type="submit">Hapus</button>
                                     </form>
                                 </div>
@@ -280,7 +280,7 @@ $skillItems = is_array($creator['skills'] ?? null) ? $creator['skills'] : [];
             <div class="card-body p-4">
                 <h2 class="h5 mb-3">Pengaturan Publik</h2>
                 <form method="post" action="/creator/profile/settings">
-                    <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                    <?= csrf_input() ?>
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" name="public_page_enabled" value="1" id="settingsPublicPage"<?= !empty($creator['public_page_enabled']) ? ' checked' : '' ?>>
                         <label class="form-check-label" for="settingsPublicPage">Aktifkan halaman publik</label>
@@ -325,7 +325,7 @@ $skillItems = is_array($creator['skills'] ?? null) ? $creator['skills'] : [];
             <div class="card-body p-4">
                 <h2 class="h5 mb-3 text-danger">Danger Zone</h2>
                 <form method="post" action="/creator/profile/delete" onsubmit="return confirm('Hapus profil Creator ini?');">
-                    <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                    <?= csrf_input() ?>
                     <button class="btn btn-outline-danger w-100" type="submit">Soft Delete Creator</button>
                 </form>
             </div>

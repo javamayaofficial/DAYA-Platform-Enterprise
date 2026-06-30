@@ -6,6 +6,7 @@ namespace App\Modules\Authentication\Controllers;
 
 use App\Core\Http\Request;
 use App\Core\Http\Response;
+use App\Modules\Authentication\Responses\AuthResponse;
 
 final class RbacController extends AbstractAuthenticationController
 {
@@ -38,7 +39,7 @@ final class RbacController extends AbstractAuthenticationController
         $this->factory->roleRepository()->syncUserRoles($userId, (array) $validation['data']['roles']);
         $request->session()->flash('auth.status', ['type' => 'success', 'message' => 'Role user berhasil diperbarui.']);
 
-        return Response::redirect('/auth/admin/users/' . $userId . '/roles');
+        return AuthResponse::redirect('/auth/admin/users/' . $userId . '/roles');
     }
 
     public function roleMatrix(Request $request): Response

@@ -17,7 +17,7 @@
                     <a class="btn btn-dark" href="/auth/security/sessions">Device Sessions</a>
                     <a class="btn btn-outline-dark" href="/auth/security/login-history">Login History</a>
                     <form method="post" action="/auth/logout" class="d-inline">
-                        <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                        <?= csrf_input() ?>
                         <button class="btn btn-outline-danger" type="submit">Logout</button>
                     </form>
                 </div>

@@ -246,7 +246,9 @@ final class StoryService extends BaseService
         $wordCount = $this->wordCount($body);
         $readingTime = $wordCount === 0 ? 0 : max(1, (int) ceil($wordCount / max(1, (int) $this->config('words_per_minute', 200))));
 
-        $story['collection_id'] = $story['collection_id'] ?? $existing?->collectionId;
+        $story['collection_id'] = array_key_exists('collection_id', $story)
+            ? $story['collection_id']
+            : $existing?->collectionId;
         $story['title'] = $title;
         $story['subtitle'] = $subtitle;
         $story['slug'] = $slug;
@@ -256,6 +258,7 @@ final class StoryService extends BaseService
         $story['language'] = trim((string) ($story['language'] ?? $this->config('default_language', 'id')));
         $story['genre'] = trim((string) ($story['genre'] ?? ''));
         $story['tags'] = trim((string) ($story['tags'] ?? ''));
+        $story['word_count'] = $wordCount;
         $story['reading_time'] = $readingTime;
         $story['visibility'] = trim((string) ($story['visibility'] ?? $this->config('default_visibility', 'private')));
         $story['seo_title'] = trim((string) ($story['seo_title'] ?? ''));

@@ -6,6 +6,7 @@ namespace App\Modules\Authentication\Controllers;
 
 use App\Core\Http\Request;
 use App\Core\Http\Response;
+use App\Modules\Authentication\Responses\AuthResponse;
 
 final class SecurityController extends AbstractAuthenticationController
 {
@@ -37,7 +38,7 @@ final class SecurityController extends AbstractAuthenticationController
         }
         $request->session()->flash('auth.status', ['type' => 'success', 'message' => 'Device session berhasil dicabut.']);
 
-        return Response::redirect('/auth/security/sessions');
+        return AuthResponse::redirect('/auth/security/sessions');
     }
 
     public function loginHistory(Request $request): Response

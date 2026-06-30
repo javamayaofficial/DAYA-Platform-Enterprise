@@ -8,7 +8,7 @@
                 <p class="text-secondary">User: <?= $user ? e((string) $user->email) : '-' ?></p>
                 <?php if (is_array($flash)): ?><div class="alert alert-<?= e((string) $flash['type']) ?>"><?= e((string) $flash['message']) ?></div><?php endif; ?>
                 <form method="post" action="/auth/admin/users/<?= e((string) ($user?->id ?? 0)) ?>/roles" class="row g-3">
-                    <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                    <?= csrf_input() ?>
                     <?php foreach ($roles as $role): ?>
                         <div class="col-md-6">
                             <div class="form-check border rounded-3 p-3">

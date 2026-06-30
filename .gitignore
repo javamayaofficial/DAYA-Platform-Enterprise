@@ -2,4 +2,6 @@
 /storage/cache/*
 !/storage/cache/.gitkeep
 /storage/config/.env
+/storage/sessions/*
+!/storage/sessions/.gitkeep
 /public/assets/.DS_Store

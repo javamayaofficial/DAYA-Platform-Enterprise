@@ -69,11 +69,11 @@ final class StoryRepository extends BaseRepository
         $statement = $this->prepare(
             'INSERT INTO stories (
                 creator_id, collection_id, story_code, title, subtitle, slug, summary, body, cover, language, genre, tags,
-                reading_time, status, visibility, seo_title, seo_description, canonical_url, og_title, og_description,
+                word_count, reading_time, status, visibility, seo_title, seo_description, canonical_url, og_title, og_description,
                 og_image, json_ld_placeholder, published_at, deleted_at, created_at, updated_at
              ) VALUES (
                 :creator_id, :collection_id, :story_code, :title, :subtitle, :slug, :summary, :body, :cover, :language, :genre, :tags,
-                :reading_time, :status, :visibility, :seo_title, :seo_description, :canonical_url, :og_title, :og_description,
+                :word_count, :reading_time, :status, :visibility, :seo_title, :seo_description, :canonical_url, :og_title, :og_description,
                 :og_image, :json_ld_placeholder, NULL, NULL, NOW(), NOW()
              )'
         );
@@ -90,6 +90,7 @@ final class StoryRepository extends BaseRepository
             'language' => $story['language'],
             'genre' => $story['genre'],
             'tags' => $story['tags'],
+            'word_count' => $story['word_count'],
             'reading_time' => $story['reading_time'],
             'status' => 'draft',
             'visibility' => $story['visibility'],
@@ -171,6 +172,7 @@ final class StoryRepository extends BaseRepository
                  language = :language,
                  genre = :genre,
                  tags = :tags,
+                 word_count = :word_count,
                  reading_time = :reading_time,
                  visibility = :visibility,
                  seo_title = :seo_title,
@@ -195,6 +197,7 @@ final class StoryRepository extends BaseRepository
             'language' => $story['language'],
             'genre' => $story['genre'],
             'tags' => $story['tags'],
+            'word_count' => $story['word_count'],
             'reading_time' => $story['reading_time'],
             'visibility' => $story['visibility'],
             'seo_title' => $story['seo_title'],

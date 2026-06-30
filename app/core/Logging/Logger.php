@@ -12,8 +12,8 @@ final class Logger
         private readonly string $logDirectory,
         private readonly string $minimumLevel = 'debug'
     ) {
-        if (!is_dir($this->logDirectory)) {
-            mkdir($this->logDirectory, 0775, true);
+        if (!is_dir($this->logDirectory) && !mkdir($this->logDirectory, 0775, true) && !is_dir($this->logDirectory)) {
+            error_log('DAYA_LOGGER_INIT_FAILED: Direktori log aplikasi tidak dapat dibuat.');
         }
     }
 
@@ -44,6 +44,8 @@ final class Logger
         $line = sprintf("[%s] %s: %s %s%s", $timestamp, strtoupper($level), $message, $contextJson, PHP_EOL);
         $filename = $this->logDirectory . DIRECTORY_SEPARATOR . 'app-' . date('Y-m-d') . '.log';
 
-        file_put_contents($filename, $line, FILE_APPEND | LOCK_EX);
+        if (file_put_contents($filename, $line, FILE_APPEND | LOCK_EX) === false) {
+            error_log('DAYA_LOGGER_WRITE_FAILED: ' . trim($line));
+        }
     }
 }

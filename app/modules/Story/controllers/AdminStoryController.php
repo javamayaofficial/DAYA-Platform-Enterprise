@@ -14,7 +14,16 @@ final class AdminStoryController extends AbstractStoryController
 {
     public function index(Request $request): Response
     {
-        $criteria = StoryListCriteria::fromRequest(StoryRequest::from($request));
+        $storyRequest = StoryRequest::from($request);
+        $criteria = new StoryListCriteria(
+            $storyRequest->search(),
+            $storyRequest->statusFilter(),
+            $storyRequest->visibilityFilter(),
+            $storyRequest->page(),
+            $storyRequest->perPage((int) $this->module()->config('admin_per_page', 15)),
+            $storyRequest->includeDeleted(),
+            false
+        );
         $result = $this->factory->service()->paginate($criteria);
 
         return $this->render('admin/index', 'Story Directory', [

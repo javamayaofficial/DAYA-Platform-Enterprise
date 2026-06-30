@@ -35,7 +35,7 @@
                                     <span class="badge text-bg-success">Current</span>
                                 <?php else: ?>
                                     <form method="post" action="/auth/security/sessions/revoke" class="d-inline">
-                                        <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                                        <?= csrf_input() ?>
                                         <input type="hidden" name="device_session_id" value="<?= e((string) $session['id']) ?>">
                                         <button class="btn btn-sm btn-outline-danger" type="submit">Revoke</button>
                                     </form>

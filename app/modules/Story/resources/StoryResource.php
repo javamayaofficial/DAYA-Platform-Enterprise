@@ -27,7 +27,7 @@ final class StoryResource
             'tags' => self::tags($story->tags),
             'tags_string' => $story->tags,
             'reading_time' => $story->readingTime,
-            'word_count' => self::wordCount($story->body),
+            'word_count' => $story->wordCount,
             'status' => $story->status,
             'visibility' => $story->visibility,
             'seo_title' => $story->seoTitle,
@@ -66,7 +66,7 @@ final class StoryResource
             'genre' => $story->genre,
             'tags' => self::tags($story->tags),
             'reading_time' => $story->readingTime,
-            'word_count' => self::wordCount($story->body),
+            'word_count' => $story->wordCount,
             'status' => $story->status,
             'visibility' => $story->visibility,
             'published_at' => $story->publishedAt,
@@ -81,7 +81,7 @@ final class StoryResource
     public static function statistics(Story $story): array
     {
         return [
-            'word_count' => self::wordCount($story->body),
+            'word_count' => $story->wordCount,
             'reading_time' => $story->readingTime,
             'has_collection' => $story->collectionId !== null,
             'is_published' => $story->status === 'published',
@@ -95,13 +95,5 @@ final class StoryResource
         $items = array_filter($items, static fn (string $item): bool => $item !== '');
 
         return array_values(array_unique($items));
-    }
-
-    private static function wordCount(string $body): int
-    {
-        $matches = [];
-        preg_match_all('/\p{L}[\p{L}\p{N}\-]*/u', strip_tags($body), $matches);
-
-        return count($matches[0] ?? []);
     }
 }

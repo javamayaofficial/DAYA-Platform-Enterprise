@@ -19,7 +19,7 @@ $creatorSkillNames = array_map(static fn (array $item): string => (string) ($ite
         </div>
 
         <form method="post" action="/creator/profile/edit" class="row g-3">
-            <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+            <?= csrf_input() ?>
 
             <div class="col-md-4">
                 <label class="form-label">Handle</label>

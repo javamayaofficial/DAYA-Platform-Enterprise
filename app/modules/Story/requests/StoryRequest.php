@@ -66,9 +66,11 @@ final class StoryRequest extends BaseRequest
         return max(1, (int) $this->query('page', 1));
     }
 
-    public function perPage(): int
+    public function perPage(?int $default = null): int
     {
-        return max(1, min(50, (int) $this->query('per_page', 10)));
+        $fallback = $default ?? 10;
+
+        return max(1, min(50, (int) $this->query('per_page', $fallback)));
     }
 
     public function statusFilter(): string

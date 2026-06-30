@@ -10,7 +10,7 @@
                     <div class="alert alert-<?= e((string) $flash['type']) ?>"><?= e((string) $flash['message']) ?></div>
                 <?php endif; ?>
                 <form method="post" action="/auth/verify-notice" class="row g-3">
-                    <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                    <?= csrf_input() ?>
                     <div class="col-12">
                         <label class="form-label">Email</label>
                         <input type="email" class="form-control" name="email" value="<?= e((string) ($old['email'] ?? '')) ?>">

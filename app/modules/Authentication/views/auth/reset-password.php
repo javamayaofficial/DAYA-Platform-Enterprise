@@ -9,7 +9,7 @@
                     <div class="alert alert-<?= e((string) $flash['type']) ?>"><?= e((string) $flash['message']) ?></div>
                 <?php endif; ?>
                 <form method="post" action="/auth/reset-password" class="row g-3">
-                    <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                    <?= csrf_input() ?>
                     <input type="hidden" name="token" value="<?= e((string) ($old['token'] ?? '')) ?>">
                     <?php if (isset($errors['token'])): ?><div class="col-12"><div class="alert alert-danger mb-0"><?= e((string) $errors['token']) ?></div></div><?php endif; ?>
                     <div class="col-md-6">

@@ -20,12 +20,12 @@ $items = is_array($collection['items'] ?? null) ? $collection['items'] : [];
                         <a class="btn btn-dark" href="/collection/<?= e((string) ($collection['id'] ?? 0)) ?>/edit">Edit</a>
                         <?php if (($collection['status'] ?? '') === 'draft'): ?>
                             <form method="post" action="/collection/<?= e((string) ($collection['id'] ?? 0)) ?>/publish">
-                                <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                                <?= csrf_input() ?>
                                 <button class="btn btn-outline-dark" type="submit">Publish</button>
                             </form>
                         <?php else: ?>
                             <form method="post" action="/collection/<?= e((string) ($collection['id'] ?? 0)) ?>/draft">
-                                <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                                <?= csrf_input() ?>
                                 <button class="btn btn-outline-dark" type="submit">Kembali ke Draft</button>
                             </form>
                         <?php endif; ?>
@@ -46,7 +46,7 @@ $items = is_array($collection['items'] ?? null) ? $collection['items'] : [];
 
                 <div class="d-flex gap-2 flex-wrap mt-4">
                     <form method="post" action="/collection/<?= e((string) ($collection['id'] ?? 0)) ?>/delete" onsubmit="return confirm('Hapus collection ini?');">
-                        <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                        <?= csrf_input() ?>
                         <button class="btn btn-outline-danger" type="submit">Soft Delete</button>
                     </form>
                 </div>
@@ -58,7 +58,7 @@ $items = is_array($collection['items'] ?? null) ? $collection['items'] : [];
                 <h2 class="h5 mb-3">Content Dalam Collection</h2>
 
                 <form method="post" action="/collection/<?= e((string) ($collection['id'] ?? 0)) ?>/items" class="row g-3 mb-4">
-                    <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                    <?= csrf_input() ?>
                     <div class="col-md-9">
                         <select class="form-select" name="content_id">
                             <option value="">Pilih Content</option>
@@ -78,7 +78,7 @@ $items = is_array($collection['items'] ?? null) ? $collection['items'] : [];
                     <div class="text-secondary">Belum ada content di collection ini.</div>
                 <?php else: ?>
                     <form method="post" action="/collection/<?= e((string) ($collection['id'] ?? 0)) ?>/items/reorder">
-                        <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                        <?= csrf_input() ?>
                         <div class="table-responsive">
                             <table class="table align-middle">
                                 <thead>

@@ -10,6 +10,7 @@ Mission-Driven Creator Economy Platform berbasis Native PHP & MySQL.
 - Creator Module selesai
 - Content Module selesai
 - Collection Module selesai
+- Story Module selesai
 
 ## Modul Aktif
 
@@ -17,6 +18,7 @@ Mission-Driven Creator Economy Platform berbasis Native PHP & MySQL.
 - Creator
 - Content
 - Collection
+- Story
 
 ## Struktur Project
 

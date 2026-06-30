@@ -162,14 +162,15 @@ final class CreatorRepository extends BaseRepository
             'SELECT cp.*, u.name AS user_name, u.email AS user_email
              FROM creator_profiles cp
              INNER JOIN users u ON u.id = cp.user_id
-             WHERE (cp.handle = :identifier OR cp.slug = :identifier)
+             WHERE (cp.handle = :handle_identifier OR cp.slug = :slug_identifier)
                AND cp.status = :status
                AND cp.public_page_enabled = 1
                AND cp.deleted_at IS NULL
              LIMIT 1'
         );
         $statement->execute([
-            'identifier' => $identifier,
+            'handle_identifier' => $identifier,
+            'slug_identifier' => $identifier,
             'status' => 'active',
         ]);
         $row = $statement->fetch();

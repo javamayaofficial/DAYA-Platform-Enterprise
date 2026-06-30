@@ -6,6 +6,7 @@ namespace App\Modules\Creator\Services;
 
 use App\Core\Modular\BaseModule;
 use App\Core\Modular\BaseService;
+use App\Core\Notifications\WhatsAppNotifier;
 use App\Modules\Authentication\Models\RoleRepository;
 use App\Modules\Creator\Dto\CreatorSearchCriteria;
 use App\Modules\Creator\Models\Creator;
@@ -18,7 +19,12 @@ final class CreatorService extends BaseService
     public function __construct(
         BaseModule $module,
         private readonly CreatorRepository $repository,
-        private readonly RoleRepository $roleRepository
+        private readonly RoleRepository $roleRepository,
+        private readonly WhatsAppNotifier $whatsAppNotifier,
+        private readonly array $adminWhatsAppTargets,
+        private readonly array $whatsAppEventToggles,
+        private readonly string $appUrl,
+        private readonly string $appName
     ) {
         parent::__construct($module);
     }
@@ -49,7 +55,10 @@ final class CreatorService extends BaseService
         );
         $this->repository->assignCreatorRole($userId);
 
-        return $this->requireCreator($creatorId, true);
+        $creator = $this->requireCreator($creatorId, true);
+        $this->notifyAdminOnRegistration($creator);
+
+        return $creator;
     }
 
     public function updateProfile(int $creatorId, array $profile): Creator
@@ -130,7 +139,10 @@ final class CreatorService extends BaseService
     {
         $this->repository->review($creatorId, $review);
 
-        return $this->requireCreator($creatorId, true);
+        $creator = $this->requireCreator($creatorId, true);
+        $this->notifyAdminOnReview($creator);
+
+        return $creator;
     }
 
     public function delete(int $creatorId): void
@@ -219,5 +231,73 @@ final class CreatorService extends BaseService
         }
 
         return $profile;
+    }
+
+    private function notifyAdminOnRegistration(Creator $creator): void
+    {
+        if (!$this->isWhatsAppEventEnabled('admin_creator_registration')) {
+            return;
+        }
+
+        $message = implode("\n", [
+            '[' . $this->appName . ']',
+            'Pengajuan Creator baru masuk.',
+            'Nama: ' . $creator->displayName,
+            'Handle: @' . $creator->handle,
+            'Email: ' . (string) ($creator->userEmail ?? '-'),
+            'Status: ' . $creator->status,
+            'Review: ' . $this->adminReviewUrl($creator->id),
+        ]);
+
+        $this->notifyAdminTargets($message);
+    }
+
+    private function notifyAdminOnReview(Creator $creator): void
+    {
+        if (!$this->isWhatsAppEventEnabled('admin_creator_review')) {
+            return;
+        }
+
+        $message = implode("\n", [
+            '[' . $this->appName . ']',
+            'Status review Creator diperbarui.',
+            'Nama: ' . $creator->displayName,
+            'Handle: @' . $creator->handle,
+            'Status: ' . $creator->status,
+            'Verifikasi: ' . $creator->verificationStatus,
+            'Review: ' . $this->adminReviewUrl($creator->id),
+        ]);
+
+        $this->notifyAdminTargets($message);
+    }
+
+    private function notifyAdminTargets(string $message): void
+    {
+        $targets = array_values(array_filter(array_map(
+            static fn (mixed $item): string => trim((string) $item),
+            $this->adminWhatsAppTargets
+        )));
+
+        if ($targets === []) {
+            return;
+        }
+
+        foreach ($targets as $target) {
+            try {
+                $this->whatsAppNotifier->send($target, $message);
+            } catch (\Throwable $throwable) {
+                error_log('DAYA_WHATSAPP_NOTIFICATION_FAILED: ' . $throwable->getMessage());
+            }
+        }
+    }
+
+    private function adminReviewUrl(int $creatorId): string
+    {
+        return rtrim($this->appUrl, '/') . '/creator/admin/' . $creatorId;
+    }
+
+    private function isWhatsAppEventEnabled(string $eventKey): bool
+    {
+        return (bool) ($this->whatsAppEventToggles[$eventKey] ?? false);
     }
 }

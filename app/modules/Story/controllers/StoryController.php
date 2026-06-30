@@ -17,7 +17,16 @@ final class StoryController extends AbstractStoryController
     {
         $auth = $this->auth($request);
         $creator = $this->factory->service()->creatorProfileForUser((int) ($auth['user_id'] ?? 0));
-        $criteria = new StoryListCriteria('', '', '', 1, 5, false, false, is_array($creator) ? (int) ($creator['id'] ?? 0) : null);
+        $criteria = new StoryListCriteria(
+            '',
+            '',
+            '',
+            1,
+            (int) $this->module()->config('dashboard_per_page', 10),
+            false,
+            false,
+            is_array($creator) ? (int) ($creator['id'] ?? 0) : null
+        );
         $result = $this->factory->service()->paginate($criteria);
 
         return $this->render('dashboard/index', 'Story Dashboard', [
@@ -281,7 +290,16 @@ final class StoryController extends AbstractStoryController
 
     public function publicList(Request $request): Response
     {
-        $criteria = StoryListCriteria::fromRequest(StoryRequest::from($request), true);
+        $storyRequest = StoryRequest::from($request);
+        $criteria = new StoryListCriteria(
+            $storyRequest->search(),
+            $storyRequest->statusFilter(),
+            $storyRequest->visibilityFilter(),
+            $storyRequest->page(),
+            $storyRequest->perPage((int) $this->module()->config('public_per_page', 12)),
+            $storyRequest->includeDeleted(),
+            true
+        );
         $result = $this->factory->service()->paginate($criteria);
 
         return $this->render('public/index', 'Story Directory', [
@@ -304,6 +322,9 @@ final class StoryController extends AbstractStoryController
         return $this->render((string) 'public/show', (($data['seo_title'] ?? '') !== '' ? (string) $data['seo_title'] : (string) $data['title']) . ' | Story', [
             'story' => $data,
             'statistics' => $this->factory->service()->statistics($story),
+            'seo' => [
+                'canonical_url' => $data['canonical_url'] ?? '',
+            ],
             'flash' => null,
         ]);
     }

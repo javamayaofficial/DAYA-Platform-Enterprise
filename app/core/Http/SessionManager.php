@@ -16,6 +16,10 @@ final class SessionManager
             return;
         }
 
+        $this->configureSavePath();
+        ini_set('session.use_strict_mode', '1');
+        ini_set('session.use_only_cookies', '1');
+        ini_set('session.use_trans_sid', '0');
         session_name((string) ($this->config['name'] ?? 'daya_session'));
         session_set_cookie_params([
             'lifetime' => ((int) ($this->config['lifetime'] ?? 120)) * 60,
@@ -26,6 +30,33 @@ final class SessionManager
         ]);
 
         session_start();
+    }
+
+    private function configureSavePath(): void
+    {
+        $configuredPath = trim((string) ($this->config['save_path'] ?? ''));
+        if ($configuredPath !== '' && is_dir($configuredPath) && is_writable($configuredPath)) {
+            ini_set('session.save_path', $configuredPath);
+            session_save_path($configuredPath);
+
+            return;
+        }
+
+        $runtimeSavePath = trim((string) (ini_get('session.save_path') ?: ''));
+        if ($runtimeSavePath !== '' && is_dir($runtimeSavePath) && is_writable($runtimeSavePath)) {
+            ini_set('session.save_path', $runtimeSavePath);
+            session_save_path($runtimeSavePath);
+
+            return;
+        }
+
+        $fallbackPath = \storage_path('sessions');
+        if (!is_dir($fallbackPath) && !mkdir($fallbackPath, 0775, true) && !is_dir($fallbackPath)) {
+            throw new \RuntimeException('Direktori session tidak dapat dibuat.');
+        }
+
+        ini_set('session.save_path', $fallbackPath);
+        session_save_path($fallbackPath);
     }
 
     public function regenerate(): void
@@ -68,11 +99,7 @@ final class SessionManager
 
     public function csrfToken(): string
     {
-        if (!isset($_SESSION['_csrf_token'])) {
-            $_SESSION['_csrf_token'] = bin2hex(random_bytes(32));
-        }
-
-        return (string) $_SESSION['_csrf_token'];
+        return \csrf_token();
     }
 
     public function invalidate(): void

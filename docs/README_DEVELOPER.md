@@ -81,9 +81,12 @@
 - Contoh module container: [CollectionModule.php](file:///d:/Project/DAYA%20Platform%20Enterprise/app/modules/Collection/CollectionModule.php)
 - Contoh service container: [CollectionService.php](file:///d:/Project/DAYA%20Platform%20Enterprise/app/modules/Collection/services/CollectionService.php)
 - Contoh repository container: [CollectionRepository.php](file:///d:/Project/DAYA%20Platform%20Enterprise/app/modules/Collection/models/CollectionRepository.php)
+- Contoh module story: [StoryModule.php](file:///d:/Project/DAYA%20Platform%20Enterprise/app/modules/Story/StoryModule.php)
+- Contoh service story: [StoryService.php](file:///d:/Project/DAYA%20Platform%20Enterprise/app/modules/Story/services/StoryService.php)
+- Contoh repository story: [StoryRepository.php](file:///d:/Project/DAYA%20Platform%20Enterprise/app/modules/Story/models/StoryRepository.php)
 - Keputusan arsitektur karya: [CONTENT_ARCHITECTURE_DECISION.md](file:///d:/Project/DAYA%20Platform%20Enterprise/docs/CONTENT_ARCHITECTURE_DECISION.md)
 
 ## Status Framework
 - Baseline framework sudah digunakan oleh module `Authentication` dan `Creator`.
-- Module `Creator` kini menjadi identitas digital utama, `Content` menjadi aggregate root resmi seluruh karya, dan `Collection` menjadi container terurut untuk banyak Content.
+- Module `Creator` kini menjadi identitas digital utama, `Content` menjadi aggregate root resmi seluruh karya, `Collection` menjadi container terurut untuk banyak Content, dan `Story` menjadi karya utama yang dikonsumsi Reader.
 - Gunakan pola yang sama sebagai acuan tunggal implementasi fase berikutnya.

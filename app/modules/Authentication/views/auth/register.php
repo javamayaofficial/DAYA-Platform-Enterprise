@@ -9,7 +9,7 @@
                     <div class="alert alert-<?= e((string) $flash['type']) ?>"><?= e((string) $flash['message']) ?></div>
                 <?php endif; ?>
                 <form method="post" action="/auth/register" class="row g-3">
-                    <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                    <?= csrf_input() ?>
                     <div class="col-12">
                         <label class="form-label">Nama Lengkap</label>
                         <input class="form-control" name="name" value="<?= e((string) ($old['name'] ?? '')) ?>">

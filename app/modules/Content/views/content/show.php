@@ -31,12 +31,12 @@ $parts = is_array($content['parts'] ?? null) ? $content['parts'] : [];
                 <div class="d-flex gap-2 flex-wrap mt-4">
                     <?php if (in_array((string) ($content['status'] ?? ''), ['draft', 'rejected', 'updated'], true)): ?>
                         <form method="post" action="/content/<?= e((string) ($content['id'] ?? 0)) ?>/submit">
-                            <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                            <?= csrf_input() ?>
                             <button class="btn btn-outline-dark" type="submit">Submit Review</button>
                         </form>
                     <?php endif; ?>
                     <form method="post" action="/content/<?= e((string) ($content['id'] ?? 0)) ?>/delete" onsubmit="return confirm('Hapus content ini?');">
-                        <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                        <?= csrf_input() ?>
                         <button class="btn btn-outline-danger" type="submit">Soft Delete</button>
                     </form>
                 </div>
@@ -47,7 +47,7 @@ $parts = is_array($content['parts'] ?? null) ? $content['parts'] : [];
             <div class="card-body p-4">
                 <h2 class="h5 mb-3">Content Parts</h2>
                 <form method="post" action="/content/<?= e((string) ($content['id'] ?? 0)) ?>/parts" class="row g-3 mb-4">
-                    <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                    <?= csrf_input() ?>
                     <div class="col-md-6"><input class="form-control" name="part_title" placeholder="Judul bagian"></div>
                     <div class="col-md-6"><input class="form-control" name="part_media_url" placeholder="Media URL"></div>
                     <div class="col-12"><textarea class="form-control" name="part_summary" rows="2" placeholder="Ringkasan bagian"></textarea></div>
@@ -74,7 +74,7 @@ $parts = is_array($content['parts'] ?? null) ? $content['parts'] : [];
                                         <div class="small text-secondary mb-2"><?= e((string) ($part['summary'] ?? '')) ?></div>
                                     </div>
                                     <form method="post" action="/content/<?= e((string) ($content['id'] ?? 0)) ?>/parts/<?= e((string) ($part['id'] ?? 0)) ?>/delete">
-                                        <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                                        <?= csrf_input() ?>
                                         <button class="btn btn-sm btn-outline-danger" type="submit">Hapus</button>
                                     </form>
                                 </div>

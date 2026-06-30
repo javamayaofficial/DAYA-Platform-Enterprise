@@ -18,7 +18,7 @@ require base_path('app/modules/Content/views/partials/flash.php');
         </div>
 
         <form method="post" action="/content/create" class="row g-3">
-            <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+            <?= csrf_input() ?>
             <div class="col-md-4">
                 <label class="form-label">Content Type</label>
                 <select class="form-select" name="content_type">

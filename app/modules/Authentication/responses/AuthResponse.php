@@ -20,6 +20,20 @@ final class AuthResponse extends BaseResponse
             $viewPath = substr($viewPath, strlen($normalizedBasePath));
         }
 
-        return parent::view($viewPath, $title, $data, $statusCode);
+        return parent::html(render_layout($title, render_view($viewPath, $data)), $statusCode, self::noStoreHeaders());
+    }
+
+    public static function redirect(string $location, int $statusCode = 302, array $headers = []): Response
+    {
+        return Response::redirect($location, $statusCode, array_merge($headers, self::noStoreHeaders()));
+    }
+
+    private static function noStoreHeaders(): array
+    {
+        return [
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ];
     }
 }

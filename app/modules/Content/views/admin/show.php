@@ -37,7 +37,7 @@ $parts = is_array($content['parts'] ?? null) ? $content['parts'] : [];
             <div class="card-body p-4">
                 <h2 class="h5 mb-3">Moderasi Content</h2>
                 <form method="post" action="/content/admin/<?= e((string) ($content['id'] ?? 0)) ?>/review" class="row g-3">
-                    <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                    <?= csrf_input() ?>
                     <div class="col-md-4">
                         <select class="form-select" name="status">
                             <?php foreach ($reviewStatuses as $statusKey => $statusLabel): ?>

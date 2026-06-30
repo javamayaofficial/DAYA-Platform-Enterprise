@@ -12,6 +12,17 @@ final class Installer
 {
     public function handle(Request $request): Response
     {
+        if (!$this->canAccessInstaller()) {
+            $content = '<div class="card shadow-sm border-0"><div class="card-body p-4">'
+                . '<span class="badge text-bg-danger mb-3">403</span>'
+                . '<h1 class="h4 mb-3">Installer dikunci.</h1>'
+                . '<p class="text-secondary">Aplikasi sudah terpasang. Installer hanya dapat diakses saat development atau debug aktif.</p>'
+                . '<a class="btn btn-dark" href="/">Kembali</a>'
+                . '</div></div>';
+
+            return Response::html(render_layout('Installer Dikunci', $content), 403);
+        }
+
         if ($request->method() === 'POST') {
             return $this->install($request);
         }
@@ -59,6 +70,8 @@ final class Installer
         }
 
         try {
+            $sessionSecure = strtolower((string) parse_url($appUrl, PHP_URL_SCHEME)) === 'https';
+
             Database::test([
                 'driver' => 'mysql',
                 'host' => $dbHost,
@@ -79,7 +92,7 @@ final class Installer
                 'APP_KEY' => bin2hex(random_bytes(16)),
                 'SESSION_NAME' => (string) config('app.session.name', 'daya_session'),
                 'SESSION_LIFETIME' => (string) config('app.session.lifetime', 120),
-                'SESSION_SECURE' => config('app.session.secure', false) ? '1' : '0',
+                'SESSION_SECURE' => $sessionSecure ? '1' : '0',
                 'SESSION_HTTP_ONLY' => config('app.session.http_only', true) ? '1' : '0',
                 'SESSION_SAME_SITE' => (string) config('app.session.same_site', 'Lax'),
                 'DB_CONNECTION' => 'mysql',
@@ -173,14 +186,60 @@ final class Installer
 
     private function writeEnvironment(array $values): void
     {
+        $existingValues = $this->readEnvironmentFile();
+        $mergedValues = array_merge($existingValues, $values);
+
         $content = '';
-        foreach ($values as $key => $value) {
+        foreach ($mergedValues as $key => $value) {
             $content .= $key . '=' . str_replace(["\r", "\n"], '', (string) $value) . PHP_EOL;
         }
 
         $file = storage_path('config/.env');
+        $directory = dirname($file);
+        if (!is_dir($directory) && !mkdir($directory, 0775, true) && !is_dir($directory)) {
+            throw new RuntimeException('Direktori konfigurasi environment tidak dapat dibuat.');
+        }
+
         if (file_put_contents($file, $content, LOCK_EX) === false) {
             throw new RuntimeException('Gagal menulis file environment.');
         }
+    }
+
+    private function readEnvironmentFile(): array
+    {
+        $file = storage_path('config/.env');
+        if (!is_file($file)) {
+            return [];
+        }
+
+        $values = [];
+        $lines = file($file, FILE_IGNORE_NEW_LINES) ?: [];
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if ($line === '' || str_starts_with($line, '#')) {
+                continue;
+            }
+
+            [$key, $value] = array_pad(explode('=', $line, 2), 2, '');
+            $normalizedKey = trim($key);
+            if ($normalizedKey === '') {
+                continue;
+            }
+
+            $values[$normalizedKey] = trim($value, " \t\n\r\0\x0B\"");
+        }
+
+        return $values;
+    }
+
+    private function canAccessInstaller(): bool
+    {
+        if (!config('app.installed', false)) {
+            return true;
+        }
+
+        $environment = (string) config('app.env', 'production');
+
+        return $environment === 'development' || (bool) config('app.debug', false);
     }
 }

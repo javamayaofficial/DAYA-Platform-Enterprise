@@ -26,6 +26,7 @@ final class Request
         $method = strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'));
         $uri = (string) ($_SERVER['REQUEST_URI'] ?? '/');
         $path = parse_url($uri, PHP_URL_PATH) ?: '/';
+        $path = \normalize_app_request_path($path);
         $headers = function_exists('getallheaders') ? (array) getallheaders() : [];
 
         return new self($method, $path, $_GET, $_POST, $_SERVER, $_COOKIE, $_FILES, $headers);

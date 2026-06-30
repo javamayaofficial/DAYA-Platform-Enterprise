@@ -67,7 +67,7 @@ $selectedBadgeKeys = array_map(static fn (array $badge): string => (string) ($ba
             <div class="card-body p-4">
                 <h2 class="h5 mb-3">Review Creator</h2>
                 <form method="post" action="/creator/admin/<?= e((string) ($creator['id'] ?? 0)) ?>/review" class="row g-3">
-                    <input type="hidden" name="_csrf_token" value="<?= e($_SESSION['_csrf_token'] ?? '') ?>">
+                    <?= csrf_input() ?>
                     <div class="col-md-4">
                         <select class="form-select" name="status">
                             <?php foreach ($statuses as $statusSlug => $statusLabel): ?>

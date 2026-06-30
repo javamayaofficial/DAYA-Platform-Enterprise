@@ -53,8 +53,16 @@ $request->setSession($session);
 
 $moduleManager->bootModules($request, $logger);
 
-$allowedWhenNotInstalled = ['/install', '/health'];
-if (!config('app.installed', false) && !in_array($request->path(), $allowedWhenNotInstalled, true)) {
+$requestPath = $request->path();
+$isInstallerRequest = $requestPath === '/install' || str_starts_with($requestPath, '/install/');
+$isInstallerAssetRequest = str_starts_with($requestPath, '/assets/');
+
+if (
+    !config('app.installed', false)
+    && !$isInstallerRequest
+    && !$isInstallerAssetRequest
+    && !in_array($requestPath, ['/health', '/favicon.ico'], true)
+) {
     Response::redirect('/install')->send();
 
     return;

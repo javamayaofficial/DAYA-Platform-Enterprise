@@ -18,9 +18,9 @@ class BaseResponse
         return Response::json($payload, $statusCode, $headers);
     }
 
-    public static function redirect(string $location, int $statusCode = 302): Response
+    public static function redirect(string $location, int $statusCode = 302, array $headers = []): Response
     {
-        return Response::redirect($location, $statusCode);
+        return Response::redirect($location, $statusCode, $headers);
     }
 
     public static function view(string $viewPath, string $title, array $data = [], int $statusCode = 200): Response
